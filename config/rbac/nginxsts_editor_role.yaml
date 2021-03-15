@@ -1,0 +1,24 @@
+# permissions for end users to edit nginxsts.
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: nginxsts-editor-role
+rules:
+- apiGroups:
+  - demo.consol.de
+  resources:
+  - nginxsts
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - demo.consol.de
+  resources:
+  - nginxsts/status
+  verbs:
+  - get
