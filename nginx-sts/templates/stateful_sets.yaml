@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{ include "nginx-sts.fullname" . }}
+  labels:
+    {{- include "nginx-sts.labels" . | nindent 4 }}
+spec:
+  selector:
+    matchLabels:
+      app: {{ include "nginx-sts.fullname" . }} 
+  serviceName: "{{ include "nginx-sts.fullname" . }}"
+  replicas: {{ .Values.replicaCount }}
+  template:
+    metadata:
+      labels:
+        app: {{ include "nginx-sts.fullname" . }} 
+        {{- include "nginx-sts.selectorLabels" . | nindent 8 }}
+    spec:
+      terminationGracePeriodSeconds: 10
+      containers:
+      - name: nginx
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        ports:
+          - containerPort: {{ .Values.service.port }}
+            protocol: TCP
+            name: http
+        volumeMounts:
+        - name: nginx-conf
+          mountPath: /etc/nginx
+        resources:
+          {{- toYaml .Values.resources | nindent 12 }}
+      volumes:
+        - name: nginx-conf
+          configMap:
+            # Provide the name of the ConfigMap containing the files you want
+            # to add to the container
+            name: {{ include "nginx-sts.fullname" . }}-conf

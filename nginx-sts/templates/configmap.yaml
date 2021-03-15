@@ -1,0 +1,37 @@
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: {{ include "nginx-sts.fullname" . }}-conf
+  labels:
+    {{- include "nginx-sts.labels" . | nindent 4 }}
+data:
+  nginx.conf: |-
+    pid        /tmp/nginx.pid;
+    worker_processes 1;
+
+    events {
+      worker_connections 1024;
+    }
+
+    http {
+      client_body_temp_path /tmp/client_temp;
+      proxy_temp_path       /tmp/proxy_temp_path;
+      fastcgi_temp_path     /tmp/fastcgi_temp;
+      uwsgi_temp_path       /tmp/uwsgi_temp;
+      scgi_temp_path        /tmp/scgi_temp;
+      # More parameter for access log can be found here: http://nginx.org/en/docs/http/ngx_http_core_module.html#variables
+      log_format my_access_log '$remote_addr - $remote_user [$time_local] '
+                            '"$request" $status $body_bytes_sent '
+                            '"$http_referer" "$http_user_agent"';
+      
+      add_header 'X-PodName' '$hostname';
+
+      server {
+          access_log /dev/stdout my_access_log;
+          error_log /dev/stderr warn;
+          listen       {{ .Values.service.port }};
+          server_name  localhost;
+          root  /usr/share/nginx/html;
+      }
+    }
+  

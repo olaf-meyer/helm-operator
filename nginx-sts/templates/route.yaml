@@ -1,0 +1,14 @@
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: {{ include "nginx-sts.fullname" . }}
+  labels:
+    app: {{ include "nginx-sts.fullname" . }}
+spec:
+  port:
+    targetPort: http
+  to:
+    kind: Service
+    name: {{ include "nginx-sts.fullname" . }}
+    weight: 100
+  wildcardPolicy: None

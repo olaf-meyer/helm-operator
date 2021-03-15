@@ -1,0 +1,3 @@
+1. Get the application URL by running these commands:
+export HOST=$(oc get route {{ include "nginx-sts.fullname" . }} -o jsonpath="{.spec.host}" --namespace {{ .Release.Namespace }})
+echo http://$HOST
