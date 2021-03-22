@@ -48,3 +48,4 @@ spec:
             cpu: 100m
             memory: 60Mi
       terminationGracePeriodSeconds: 10
+      serviceAccountName: nginx-sts-controller-manager
