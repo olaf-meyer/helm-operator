@@ -48,11 +48,22 @@ spec:
         name: ""
         version: v1
       specDescriptors:
+      - description: The number of replicas of the nginx stateful set.
+        displayName: Replicas
+        path: replicaCount
+        x-descriptors:
+        - urn:alm:descriptor:com.tectonic.ui:podCount
       - description: Limits describes the minimum/maximum amount of compute resources required/allowed
         displayName: Resource Requirements
         path: resources
         x-descriptors:
         - urn:alm:descriptor:com.tectonic.ui:resourceRequirements
+      statusDescriptors:
+      - description: Name of the created application
+        displayName: My-Application name
+        path: deployedRelease.name
+        x-descriptors:
+          - 'urn:alm:descriptor:text'
       version: v1alpha1
   description: This will deploy Nginx as a StatefuleSet. This is an example! Don't use it in production!
   displayName: Nginx-StatefulSet
