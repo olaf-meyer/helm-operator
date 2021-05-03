@@ -1,7 +1,0 @@
-apiVersion: demo.consol.de/v1alpha1
-kind: NginxSts
-metadata:
-  name: nginxsts-sample
-  namespace: default
-spec:
-  replicaCount: 4
